@@ -14,6 +14,7 @@ class Corp(models.Model):
     name = models.CharField(max_length=128)
     ticker = models.CharField(max_length=5)
     logo = models.ImageField(upload_to="corps")
+    active = models.BooleanField(default=False)
 
     @staticmethod
     def fetch(id):
@@ -50,6 +51,7 @@ class Alliance(models.Model):
     name = models.CharField(max_length=128)
     ticker = models.CharField(max_length=5)
     logo = models.ImageField(upload_to="alliances")
+    active = models.BooleanField(default=False)
 
     @staticmethod
     def fetch(id):
