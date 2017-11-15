@@ -10,7 +10,7 @@ from django.core.files import File
 
 
 class Corp(models.Model):
-    id = models.BigIntegerField(primary_key=True)
+    corp_id = models.BigIntegerField(db_index=True)
     name = models.CharField(max_length=128)
     ticker = models.CharField(max_length=5)
     logo = models.ImageField(upload_to="corps")
@@ -33,9 +33,9 @@ class Corp(models.Model):
 
         # Build corp object
         corp = corp.json()
-        db_corp = Corp.objects.filter(id=id).first()
+        db_corp = Corp.objects.filter(corp_id=id).first()
         if db_corp == None:
-            db_corp = Corp(id=id)
+            db_corp = Corp(corp_id=id)
         else:
             db_corp.name = corp['corporation_name']
             db_corp.ticker = corp['ticker']
@@ -55,11 +55,11 @@ class Corp(models.Model):
 
 
 class Alliance(models.Model):
-    id = models.BigIntegerField(primary_key=True)
+    alliance_id = models.BigIntegerField(db_index=True)
     name = models.CharField(max_length=128)
     ticker = models.CharField(max_length=5)
     logo = models.ImageField(upload_to="alliances")
-    active = models.BooleanField(default=False)
+    active = models.BooleanField(default=False, db_index=True)
     corp_count = models.IntegerField(null=True, default=None)
 
     @property
@@ -80,9 +80,9 @@ class Alliance(models.Model):
         # Build alliance object
         alliance = alliance.json()
         corps = corps.json()
-        db_alliance = Alliance.objects.filter(id=id).first()
+        db_alliance = Alliance.objects.filter(alliance_id=id).first()
         if db_alliance == None:
-            db_alliance = Alliance(id=id)
+            db_alliance = Alliance(alliance_id=id)
 
         db_alliance.name = alliance['alliance_name']
         db_alliance.ticker = alliance['ticker']
