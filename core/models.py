@@ -14,7 +14,7 @@ class Corp(models.Model):
     name = models.CharField(max_length=128)
     ticker = models.CharField(max_length=5)
     logo = models.ImageField(upload_to="corps")
-    active = models.BooleanField(default=False)
+    active = models.BooleanField(default=False, db_index=True)
     member_count = models.IntegerField(null=True, default=None)
 
     @property
@@ -83,10 +83,10 @@ class Alliance(models.Model):
         db_alliance = Alliance.objects.filter(id=id).first()
         if db_alliance == None:
             db_alliance = Alliance(id=id)
-        else:
-            db_alliance.name = alliance['alliance_name']
-            db_alliance.ticker = alliance['ticker']
-            db_alliance.corp_count = len(corps)
+
+        db_alliance.name = alliance['alliance_name']
+        db_alliance.ticker = alliance['ticker']
+        db_alliance.corp_count = len(corps)
 
         db_alliance.save()
         db_alliance.logo.save(

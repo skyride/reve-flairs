@@ -9,12 +9,15 @@ class Command(BaseCommand):
     help = "Fetches all alliances in EVE Online"
 
     def handle(self, *args, **options):
-        print "Fetching alliance list..."
+        print "Fetching top 200 alliance list..."
         alliance_ids = requests.get("https://esi.tech.ccp.is/latest/alliances/").json()
+        alliance_ids = alliance_ids[:200]
         print "%i alliances in the list, starting..." % len(alliance_ids)
 
         for i, id in enumerate(alliance_ids):
             alliance = Alliance.fetch(id)
+            alliance.active = True
+            alliance.save()
 
             if alliance.closed:
                 print "(%s/%s) Fetched %s, closed" % (i+1, len(alliance_ids), alliance.name)
