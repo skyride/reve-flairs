@@ -11,7 +11,7 @@ from django.core.files import File
 
 class Corp(models.Model):
     corp_id = models.BigIntegerField(db_index=True)
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, db_index=True)
     ticker = models.CharField(max_length=5)
     logo = models.ImageField(upload_to="corps")
     active = models.BooleanField(default=False, db_index=True)
@@ -56,7 +56,7 @@ class Corp(models.Model):
 
 class Alliance(models.Model):
     alliance_id = models.BigIntegerField(db_index=True)
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, db_index=True)
     ticker = models.CharField(max_length=5)
     logo = models.ImageField(upload_to="alliances")
     active = models.BooleanField(default=False, db_index=True)
