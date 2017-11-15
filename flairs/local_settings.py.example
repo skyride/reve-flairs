@@ -1,0 +1,15 @@
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': '',
+        'HOST': '',
+        'USER': '',
+        'PASSWORD': ''
+    }
+}
+
+PRAW_CLIENT_ID = ""
+PRAW_CLIENT_SECRET = ""
+PRAW_USERNAME = ""
+PRAW_PASSWORD = ""
+PRAW_SUBREDDIT = "eve"
