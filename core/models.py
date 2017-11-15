@@ -36,10 +36,10 @@ class Corp(models.Model):
         db_corp = Corp.objects.filter(corp_id=id).first()
         if db_corp == None:
             db_corp = Corp(corp_id=id)
-        else:
-            db_corp.name = corp['corporation_name']
-            db_corp.ticker = corp['ticker']
-            db_corp.member_count = corp['member_count']
+
+        db_corp.name = corp['corporation_name']
+        db_corp.ticker = corp['ticker']
+        db_corp.member_count = corp['member_count']
 
         db_corp.save()
         db_corp.logo.save(
