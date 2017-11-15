@@ -4,20 +4,13 @@ from PIL import Image
 
 from django.conf import settings
 
-from core.models import Alliance, Corp
-
 w = 35
 h = 35
 row_size = 20
 
-def generate_alliance_spritesheet():
+def generate_spritesheet(icon_map, output_file, w=w, h=h, row_size=row_size):
     # Get the list of icons we want to generate
-    icon_map = Alliance.objects.filter(active=True).all()
     icon_map = map(lambda x: x.logo.path, icon_map)
-
-    w = 35
-    h = 35
-    row_size = 20
     sprite_size = (w, h)
 
     images = []
@@ -27,7 +20,7 @@ def generate_alliance_spritesheet():
         images.append(image)
 
     master_width = w * row_size
-    master_height = int(math.ceil(len(images) / row_size)) * h
+    master_height = int(math.ceil(float(len(images)) / row_size)) * h
 
     master = Image.new(
         mode='RGBA',
@@ -42,6 +35,6 @@ def generate_alliance_spritesheet():
         )
         master.paste(image, location)
 
-    path = os.path.join(settings.MEDIA_ROOT, "alliances.png")
+    path = os.path.join(settings.MEDIA_ROOT, output_file)
     master.save(path, 'PNG', optimize=True)
     return path

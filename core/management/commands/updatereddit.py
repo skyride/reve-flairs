@@ -3,7 +3,7 @@ from django.conf import settings
 
 from core.models import Alliance, Corp
 from core.reddit import get_subreddit
-from core.images import generate_alliance_spritesheet
+from core.images import generate_spritesheet
 
 
 class Command(BaseCommand):
@@ -47,4 +47,5 @@ class Command(BaseCommand):
             sub.flair.templates.add(corp.name, css_class="c%i" % corp.id, text_editable=False)
             print "Added %s" % corp.name
 
-        generate_alliance_spritesheet()
+        print generate_spritesheet(Alliance.objects.filter(active=True).all(), "alliances.png")
+        print generate_spritesheet(Corp.objects.filter(active=True).all(), "corps.png")
