@@ -47,5 +47,10 @@ class Command(BaseCommand):
             sub.flair.templates.add(corp.name, css_class="c%i" % corp.id, text_editable=False)
             print "Added %s" % corp.name
 
-        print generate_spritesheet(Alliance.objects.filter(active=True).all(), "alliances.png")
-        print generate_spritesheet(Corp.objects.filter(active=True).all(), "corps.png")
+        # Get final lists
+        alliances = Alliance.objects.filter(active=True).all()
+        corps = Corp.objects.filter(active=True).all()
+
+        # Generate sprite sheets
+        alliance_sprite = generate_spritesheet(alliances, "alliances.png")
+        corp_sprite = generate_spritesheet(corps, "corps.png")

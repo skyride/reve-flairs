@@ -8,6 +8,13 @@ w = 35
 h = 35
 row_size = 20
 
+
+def calc_location(i, w=w, h=h, row_size=row_size):
+    return (
+        (i % row_size) * w,
+        int(math.floor(i / row_size)) * h
+    )
+
 def generate_spritesheet(icon_map, output_file, w=w, h=h, row_size=row_size):
     # Get the list of icons we want to generate
     icon_map = map(lambda x: x.logo.path, icon_map)
@@ -29,10 +36,7 @@ def generate_spritesheet(icon_map, output_file, w=w, h=h, row_size=row_size):
     )
 
     for i, image in enumerate(images):
-        location = (
-            (i % row_size) * w,
-            int(math.floor(i / row_size)) * h
-        )
+        location = calc_location(i)
         master.paste(image, location)
 
     path = os.path.join(settings.MEDIA_ROOT, output_file)
