@@ -15,6 +15,11 @@ class Corp(models.Model):
     ticker = models.CharField(max_length=5)
     logo = models.ImageField(upload_to="corps")
     active = models.BooleanField(default=False)
+    member_count = models.IntegerField(null=True, default=None)
+
+    @property
+    def closed(self):
+        return self.member_count < 1
 
     @staticmethod
     def fetch(id):
@@ -31,7 +36,8 @@ class Corp(models.Model):
         db_corp = Corp(
             id=id,
             name=corp['corporation_name'],
-            ticker=corp['ticker']
+            ticker=corp['ticker'],
+            member_count=corp['member_count']
         )
         db_corp.save()
         db_corp.logo.save(
@@ -52,11 +58,17 @@ class Alliance(models.Model):
     ticker = models.CharField(max_length=5)
     logo = models.ImageField(upload_to="alliances")
     active = models.BooleanField(default=False)
+    corp_count = models.IntegerField(null=True, default=None)
+
+    @property
+    def closed(self):
+        return self.corp_count < 1
 
     @staticmethod
     def fetch(id):
         # Get data
         alliance = requests.get("https://esi.tech.ccp.is/latest/alliances/%s/" % id)
+        corps = requests.get("https://esi.tech.ccp.is/latest/alliances/%s/corporations/" % id)
         if alliance.status_code != 200:
             return None
 
@@ -65,10 +77,12 @@ class Alliance(models.Model):
 
         # Build alliance object
         alliance = alliance.json()
+        corps = corps.json()
         db_alliance = Alliance(
             id=id,
             name=alliance['alliance_name'],
-            ticker=alliance['ticker']
+            ticker=alliance['ticker'],
+            corp_count=len(corps)
         )
         db_alliance.save()
         db_alliance.logo.save(
