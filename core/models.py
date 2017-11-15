@@ -33,12 +33,14 @@ class Corp(models.Model):
 
         # Build corp object
         corp = corp.json()
-        db_corp = Corp(
-            id=id,
-            name=corp['corporation_name'],
-            ticker=corp['ticker'],
-            member_count=corp['member_count']
-        )
+        db_corp = Corp.objects.filter(id=id).first()
+        if db_corp == None:
+            db_corp = Corp(id=id)
+        else:
+            db_corp.name = corp['corporation_name']
+            db_corp.ticker = corp['ticker']
+            db_corp.member_count = corp['member_count']
+
         db_corp.save()
         db_corp.logo.save(
             "corp_%s.png" % id,
@@ -78,12 +80,14 @@ class Alliance(models.Model):
         # Build alliance object
         alliance = alliance.json()
         corps = corps.json()
-        db_alliance = Alliance(
-            id=id,
-            name=alliance['alliance_name'],
-            ticker=alliance['ticker'],
-            corp_count=len(corps)
-        )
+        db_alliance = Alliance.objects.filter(id=id).first()
+        if db_alliance == None:
+            db_alliance = Alliance(id=id)
+        else:
+            db_alliance.name = alliance['alliance_name']
+            db_alliance.ticker = alliance['ticker']
+            db_alliance.corp_count = len(corps)
+
         db_alliance.save()
         db_alliance.logo.save(
             "alliance_%s.png" % id,
