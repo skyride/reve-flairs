@@ -3,12 +3,19 @@ from __future__ import unicode_literals
 import os
 import requests
 import urllib
+from solo.models import SingletonModel
 
 from django.db import models
 from django.conf import settings
 from django.core.files import File
 
 from core.images import is_generic_alliance_logo
+
+
+class Config(SingletonModel):
+    alliance_sprite = models.CharField(max_length=32, null=True, default=None)
+    corp_sprite = models.CharField(max_length=32, null=True, default=None)
+    style_size = models.IntegerField(null=True, default=None)
 
 
 class Corp(models.Model):

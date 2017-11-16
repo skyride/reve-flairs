@@ -5,7 +5,7 @@ from django.conf import settings
 from django.utils.crypto import get_random_string
 from csscompressor import compress
 
-from core.models import Alliance, Corp
+from core.models import Alliance, Corp, Config
 from core.reddit import get_subreddit
 from core.images import generate_spritesheet, calc_location
 
@@ -69,12 +69,22 @@ class Command(BaseCommand):
         print "Generating corp spritesheet"
         corp_sprite = generate_spritesheet(corps, "corps.png")
 
+        # Delete old spritesheets
+        print "Deleting old spritesheets"
+        config = Config.get_solo()
+        if config.alliance_sprite != None:
+            sub.stylesheet.delete_image(config.alliance_sprite)
+            sub.stylesheet.delete_image(config.corp_sprite)
+
         # Upload sprite sheets
         print "Uploading spritesheets"
         alliance_sprite_name = "a-%s" % get_random_string(3)
         corp_sprite_name = "c-%s" % get_random_string(3)
         sub.stylesheet.upload(alliance_sprite_name, alliance_sprite)
         sub.stylesheet.upload(corp_sprite_name, corp_sprite)
+
+        config.alliance_sprite = alliance_sprite_name
+        config.corp_sprite = corp_sprite_name
 
         # Generate CSS
         print "Fetching base CSS from github"
@@ -84,8 +94,8 @@ class Command(BaseCommand):
         print "Generating flair CSS"
         for i, alliance in enumerate(alliances):
             x, y = calc_location(i)
-            css = ".flair-%s { background: url(%%%%%s%%%%) -%ipx -%ipx no-repeat; text-indent: 30px; min-width: 28px; height: 25px; } " % (
-            #css = ".flair-%s { background: url(%%%%%s%%%%) -%ipx -%ipx no-repeat; } " % (
+            #css = ".flair-%s { background: url(%%%%%s%%%%) -%ipx -%ipx no-repeat; text-indent: 30px; min-width: 28px; height: 25px; } " % (
+            css = ".flair-%s { background: url(%%%%%s%%%%) -%ipx -%ipx no-repeat; } " % (
                 alliance.css_class,
                 alliance_sprite_name,
                 x,
@@ -95,7 +105,9 @@ class Command(BaseCommand):
 
         print "Compressing..."
         css = compress(base_css + flair_css)
-        print len(css.encode("utf-8")), "kiB"
+        config.style_size = len(css.encode("utf-8"))
+        config.save()
+        print config.style_size, "kiB"
 
         print "Uploading CSS Sheet"
         sub.stylesheet.update(css)
