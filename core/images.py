@@ -8,6 +8,12 @@ w = 25
 h = 25
 row_size = 1
 
+generic_alliance_logo = Image.open(os.path.join(settings.BASE_DIR, "core/generic_alliance_logo.png"))
+
+
+def is_generic_alliance_logo(logo):
+    histogram = Image.open(logo).histogram()
+    return generic_alliance_logo.histogram() == histogram
 
 def calc_location(i, w=w, h=h, row_size=row_size):
     return (

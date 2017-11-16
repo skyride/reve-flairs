@@ -8,6 +8,8 @@ from django.db import models
 from django.conf import settings
 from django.core.files import File
 
+from core.images import is_generic_alliance_logo
+
 
 class Corp(models.Model):
     corp_id = models.BigIntegerField(db_index=True)
@@ -61,10 +63,18 @@ class Alliance(models.Model):
     logo = models.ImageField(upload_to="alliances")
     active = models.BooleanField(default=False, db_index=True)
     corp_count = models.IntegerField(null=True, default=None)
+    generic_logo = models.BooleanField(default=True)
 
     @property
     def closed(self):
         return self.corp_count < 1
+
+    @property
+    def css_class(self):
+        if self.generic_logo:
+            return "ag"
+        else:
+            return "a%s" % self.id
 
     @staticmethod
     def fetch(id):
@@ -93,6 +103,10 @@ class Alliance(models.Model):
             "alliance_%s.png" % id,
             File(open(logo[0]))
         )
+
+        # Check if logo is generic
+        db_alliance.generic_logo = is_generic_alliance_logo(db_alliance.logo)
+        db_alliance.save()
 
         return db_alliance
 

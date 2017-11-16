@@ -33,7 +33,7 @@ class Command(BaseCommand):
         # Add newly active alliance flairs
         print "Adding newly active alliance flairs"
         for alliance in Alliance.objects.filter(active=True).exclude(id__in=live_flairs).all():
-            sub.flair.templates.add(alliance.name, css_class="a%i" % alliance.id, text_editable=False)
+            sub.flair.templates.add(alliance.name, css_class=alliance.css_class, text_editable=False)
             print "Added %s" % alliance.name
 
         # Remove inactive corp flairs and build the corp flair list
@@ -56,7 +56,7 @@ class Command(BaseCommand):
             print "Added %s" % corp.name
 
         # Get final lists
-        alliances = Alliance.objects.filter(active=True).all()
+        alliances = Alliance.objects.filter(active=True, generic_logo=False).all()
         corps = Corp.objects.filter(active=True).all()
         print "Getting final list of active alliances (%s) and corps (%s)" % (
             alliances.count(),
@@ -84,8 +84,9 @@ class Command(BaseCommand):
         print "Generating flair CSS"
         for i, alliance in enumerate(alliances):
             x, y = calc_location(i)
-            css = ".flair-a%i { background: url(%%%%%s%%%%) -%ipx -%ipx no-repeat; text-indent: 30px; min-width: 28px; height: 25px; } " % (
-                alliance.id,
+            #css = ".flair-%s { background: url(%%%%%s%%%%) -%ipx -%ipx no-repeat; text-indent: 30px; min-width: 28px; height: 25px; } " % (
+            css = ".flair-%s { background: url(%%%%%s%%%%) -%ipx -%ipx no-repeat; } " % (
+                alliance.css_class,
                 alliance_sprite_name,
                 x,
                 y
