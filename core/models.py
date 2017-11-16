@@ -35,7 +35,7 @@ class Corp(models.Model):
         return "c%s" % self.id
 
     @staticmethod
-    def fetch(id):
+    def fetch(id, active=False):
         # Get data
         corp = requests.get("https://esi.tech.ccp.is/latest/corporations/%s/" % id)
         if corp.status_code != 200:
@@ -53,6 +53,7 @@ class Corp(models.Model):
         db_corp.name = corp['corporation_name']
         db_corp.ticker = corp['ticker']
         db_corp.member_count = corp['member_count']
+        db_corp.active = active
 
         db_corp.save()
         db_corp.logo.save(

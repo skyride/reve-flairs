@@ -9,10 +9,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Get largest alliances
-        largest_alliances = list(Alliance.objects.order_by('-characters').values_list('alliance_id', flat=True)[:200])
+        largest_alliances = list(Alliance.objects.filter(generic_logo=False).order_by('-characters').values_list('alliance_id', flat=True)[:150])
 
         # Get the most active pvp alliances
-        active_alliances = list(Alliance.objects.order_by('-recent_kills').values_list('alliance_id', flat=True)[:200])
+        active_alliances = list(Alliance.objects.filter(generic_logo=False).order_by('-recent_kills').values_list('alliance_id', flat=True)[:250])
 
         id_set = set(largest_alliances + active_alliances)
         print len(id_set)
@@ -20,6 +20,6 @@ class Command(BaseCommand):
         # Update active
         print "Updating database"
         Alliance.objects.filter(active=True).update(active=False)
-        Alliance.objects.filter(alliance_id__in=largest_alliances).update(active=True)
+        Alliance.objects.filter(alliance_id__in=id_set).update(active=True)
 
         print "Done!"

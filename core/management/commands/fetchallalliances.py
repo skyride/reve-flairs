@@ -20,7 +20,7 @@ class Command(BaseCommand):
 
             # Get data from zkill
             zkill = requests.get("https://zkillboard.com/api/stats/allianceID/%s/" % id).json()
-            if zkill != None:
+            try:
                 try:
                     alliance.characters = zkill['info']['memberCount']
                 except KeyError:
@@ -38,7 +38,7 @@ class Command(BaseCommand):
                     print "Failed to fetch active pvp data from zkill"
                 alliance.save()
 
-            else:
+            except Exception:
                 print "Failed to get any from zkill"
 
             if alliance.closed:
