@@ -84,8 +84,8 @@ class Command(BaseCommand):
         print "Generating flair CSS"
         for i, alliance in enumerate(alliances):
             x, y = calc_location(i)
-            #css = ".flair-%s { background: url(%%%%%s%%%%) -%ipx -%ipx no-repeat; text-indent: 30px; min-width: 28px; height: 25px; } " % (
-            css = ".flair-%s { background: url(%%%%%s%%%%) -%ipx -%ipx no-repeat; } " % (
+            css = ".flair-%s { background: url(%%%%%s%%%%) -%ipx -%ipx no-repeat; text-indent: 30px; min-width: 28px; height: 25px; } " % (
+            #css = ".flair-%s { background: url(%%%%%s%%%%) -%ipx -%ipx no-repeat; } " % (
                 alliance.css_class,
                 alliance_sprite_name,
                 x,
