@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ["192.168.0.18"]
 MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
 MEDIA_URL = "/media/"
 
-SUBREDDIT_CSS_URL = "https://raw.githubusercontent.com/Jibrisheve/-r-eve/master/Main%20subreddit/v2.0.css"
+SUBREDDIT_CSS_URL = "https://raw.githubusercontent.com/Jibrisheve/-r-eve/master/Main%20subreddit/v3.0.css"
 
 
 # Application definition

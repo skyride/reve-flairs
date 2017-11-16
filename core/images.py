@@ -4,9 +4,9 @@ from PIL import Image
 
 from django.conf import settings
 
-w = 35
-h = 35
-row_size = 20
+w = 25
+h = 25
+row_size = 1
 
 
 def calc_location(i, w=w, h=h, row_size=row_size):
