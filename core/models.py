@@ -30,6 +30,10 @@ class Corp(models.Model):
     def closed(self):
         return self.member_count < 1
 
+    @property
+    def css_class(self):
+        return "c%s" % self.id
+
     @staticmethod
     def fetch(id):
         # Get data

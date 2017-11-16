@@ -99,8 +99,18 @@ class Command(BaseCommand):
                 alliance_sprite_name,
                 x,
                 y
-                flair_css = flair_css + css
             )
+            flair_css = flair_css + css
+
+        for i, corp in enumerate(corps):
+            x, y = calc_location(i)
+            css = ".flair-%s { background: url(%%%%%s%%%%) %i -%ipx repeat-y } " % (
+                corp.css_class,
+                corp_sprite_name,
+                x,
+                y
+            )
+            flair_css = flair_css + css
 
         print "Compressing..."
         css = compress(base_css + flair_css)
