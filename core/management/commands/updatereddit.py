@@ -78,8 +78,8 @@ class Command(BaseCommand):
 
         # Upload sprite sheets
         print "Uploading spritesheets"
-        alliance_sprite_name = "a-%s" % get_random_string(3)
-        corp_sprite_name = "c-%s" % get_random_string(3)
+        alliance_sprite_name = "a"
+        corp_sprite_name = "c"
         sub.stylesheet.upload(alliance_sprite_name, alliance_sprite)
         sub.stylesheet.upload(corp_sprite_name, corp_sprite)
 
@@ -94,20 +94,19 @@ class Command(BaseCommand):
         print "Generating flair CSS"
         for i, alliance in enumerate(alliances):
             x, y = calc_location(i)
-            #css = ".flair-%s { background: url(%%%%%s%%%%) -%ipx -%ipx no-repeat; text-indent: 30px; min-width: 28px; height: 25px; } " % (
-            css = ".flair-%s { background: url(%%%%%s%%%%) -%ipx -%ipx no-repeat; } " % (
+            css = ".flair-%s { background: url(%%%%%s%%%%) %i -%ipx repeat-y } " % (
                 alliance.css_class,
                 alliance_sprite_name,
                 x,
                 y
+                flair_css = flair_css + css
             )
-            flair_css = flair_css + css
 
         print "Compressing..."
         css = compress(base_css + flair_css)
         config.style_size = len(css.encode("utf-8"))
         config.save()
-        print config.style_size, "kiB"
+        print config.style_size, "bytes"
 
         print "Uploading CSS Sheet"
         sub.stylesheet.update(css)
