@@ -18,6 +18,7 @@ class Command(BaseCommand):
 
 
         # Remove inactive alliance flairs and build the alliance flair list
+        print "Removing inactive alliance flairs"
         live_flairs = []
         for flair in sub.flair.templates:
             alliance = Alliance.objects.filter(name=flair['flair_text']).first()
@@ -30,11 +31,13 @@ class Command(BaseCommand):
                     print "Removed %s" % alliance.name
 
         # Add newly active alliance flairs
+        print "Adding newly active alliance flairs"
         for alliance in Alliance.objects.filter(active=True).exclude(id__in=live_flairs).all():
             sub.flair.templates.add(alliance.name, css_class="a%i" % alliance.id, text_editable=False)
             print "Added %s" % alliance.name
 
         # Remove inactive corp flairs and build the corp flair list
+        print "Removing inactive corp flairs"
         live_flairs = []
         for flair in sub.flair.templates:
             corp = Corp.objects.filter(name=flair['flair_text']).first()
@@ -47,6 +50,7 @@ class Command(BaseCommand):
                     print "Removed %s" % corp.name
 
         # Add newly active corp flairs
+        print "Adding newly active corp flairs"
         for corp in Corp.objects.filter(active=True).exclude(id__in=live_flairs).all():
             sub.flair.templates.add(corp.name, css_class="c%i" % corp.id, text_editable=False)
             print "Added %s" % corp.name
@@ -54,21 +58,30 @@ class Command(BaseCommand):
         # Get final lists
         alliances = Alliance.objects.filter(active=True).all()
         corps = Corp.objects.filter(active=True).all()
+        print "Getting final list of active alliances (%s) and corps (%s)" % (
+            alliances.count(),
+            corps.count()
+        )
 
         # Generate sprite sheets
+        print "Generating alliance spritesheet"
         alliance_sprite = generate_spritesheet(alliances, "alliances.png")
+        print "Generating corp spritesheet"
         corp_sprite = generate_spritesheet(corps, "corps.png")
 
         # Upload sprite sheets
+        print "Uploading spritesheets"
         alliance_sprite_name = "a-%s" % get_random_string(3)
         corp_sprite_name = "c-%s" % get_random_string(3)
         sub.stylesheet.upload(alliance_sprite_name, alliance_sprite)
         sub.stylesheet.upload(corp_sprite_name, corp_sprite)
 
         # Generate CSS
+        print "Fetching base CSS from github"
         base_css = requests.get(settings.SUBREDDIT_CSS_URL).text
         flair_css = ""
 
+        print "Generating flair CSS"
         for i, alliance in enumerate(alliances):
             x, y = calc_location(i)
             css = ".flair-a%i { background: url(%%%%%s%%%%) -%ipx -%ipx no-repeat; text-indent: 30px; min-width: 28px; height: 25px; } " % (
@@ -78,7 +91,11 @@ class Command(BaseCommand):
                 y
             )
             flair_css = flair_css + css
-        css = compress(base_css + flair_css)
 
-        print len(css.encode("utf-8"))
+        print "Compressing..."
+        css = compress(base_css + flair_css)
+        print len(css.encode("utf-8")), "kiB"
+
+        print "Uploading CSS Sheet"
         sub.stylesheet.update(css)
+        print "Done!"
