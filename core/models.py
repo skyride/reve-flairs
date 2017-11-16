@@ -76,6 +76,13 @@ class Alliance(models.Model):
     corp_count = models.IntegerField(null=True, default=None)
     generic_logo = models.BooleanField(default=True)
 
+    # Zkill data
+    characters = models.IntegerField(default=0, db_index=True)
+    ships_destroyed = models.IntegerField(default=0, db_index=True)
+    active_chars = models.IntegerField(default=0, db_index=True)
+    recent_kills = models.IntegerField(default=0, db_index=True)
+
+
     @property
     def closed(self):
         return self.corp_count < 1
