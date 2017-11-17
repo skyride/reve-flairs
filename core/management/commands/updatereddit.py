@@ -5,7 +5,7 @@ from django.conf import settings
 from django.utils.crypto import get_random_string
 from csscompressor import compress
 
-from core.models import Alliance, Corp, Config
+from core.models import Alliance, Corp, Config, Generic
 from core.reddit import get_subreddit
 from core.images import generate_spritesheet, calc_location
 
@@ -16,6 +16,25 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         sub = get_subreddit()
 
+
+        # Remove inactive generic flairs and build the generic flair list
+        print "Removing inactive generic flairs"
+        live_flairs = []
+        for flair in sub.flair.templates:
+            generic = Generic.objects.filter(name=flair['flair_text']).first()
+            if generic != None:
+                if generic.active:
+                    live_flairs.append(generic.id)
+                else:
+                    # Remove the generic
+                    sub.flair.templates.delete(flair['flair_template_id'])
+                    print "Removed %s" % generic.name
+
+        # Add newly active generic flairs
+        print "Adding newly active generic flairs"
+        for generic in Generic.objects.filter(active=True).exclude(id__in=live_flairs).all():
+            sub.flair.templates.add(generic.name, css_class=generic.css_class, text_editable=False)
+            print "Added %s" % generic.name
 
         # Remove inactive alliance flairs and build the alliance flair list
         print "Removing inactive alliance flairs"
@@ -56,14 +75,18 @@ class Command(BaseCommand):
             print "Added %s" % corp.name
 
         # Get final lists
+        generics = Generic.objects.filter(active=True).all()
         alliances = Alliance.objects.filter(active=True).all()
         corps = Corp.objects.filter(active=True).all()
-        print "Getting final list of active alliances (%s) and corps (%s)" % (
+        print "Getting final list of active generics (%s), alliances (%s) and corps (%s)" % (
+            generics.count(),
             alliances.count(),
             corps.count()
         )
 
         # Generate sprite sheets
+        print "Generating generic spritesheet"
+        generic_sprite = generate_spritesheet(generics, "generics.png")
         print "Generating alliance spritesheet"
         alliance_sprite = generate_spritesheet(alliances, "alliances.png")
         print "Generating corp spritesheet"
@@ -73,13 +96,16 @@ class Command(BaseCommand):
         print "Deleting old spritesheets"
         config = Config.get_solo()
         if config.alliance_sprite != None:
+            sub.stylesheet.delete_image("g")
             sub.stylesheet.delete_image(config.alliance_sprite)
             sub.stylesheet.delete_image(config.corp_sprite)
 
         # Upload sprite sheets
         print "Uploading spritesheets"
+        generic_sprite_name = "g"
         alliance_sprite_name = "a"
         corp_sprite_name = "c"
+        sub.stylesheet.upload(generic_sprite_name, generic_sprite)
         sub.stylesheet.upload(alliance_sprite_name, alliance_sprite)
         sub.stylesheet.upload(corp_sprite_name, corp_sprite)
 
@@ -92,6 +118,16 @@ class Command(BaseCommand):
         flair_css = ""
 
         print "Generating flair CSS"
+        for i, generic in enumerate(generics):
+            x, y = calc_location(i)
+            css = ".flair-%s { background: url(%%%%%s%%%%) %i -%ipx repeat-y } " % (
+                generic.css_class,
+                generic_sprite_name,
+                x,
+                y
+            )
+            flair_css = flair_css + css
+
         for i, alliance in enumerate(alliances):
             x, y = calc_location(i)
             css = ".flair-%s { background: url(%%%%%s%%%%) %i -%ipx repeat-y } " % (
