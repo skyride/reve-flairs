@@ -23,6 +23,10 @@ class Generic(models.Model):
     active = models.BooleanField(default=True)
     logo = models.ImageField(upload_to="generics")
 
+    @property
+    def css_class(self):
+        return "g%s" % self.id
+
 
 class Corp(models.Model):
     corp_id = models.BigIntegerField(db_index=True)
