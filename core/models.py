@@ -27,6 +27,9 @@ class Generic(models.Model):
     def css_class(self):
         return "g%s" % self.id
 
+    def __str__(self):
+        return "%s:%s" % (self.id, self.name)
+
 
 class Corp(models.Model):
     corp_id = models.BigIntegerField(db_index=True)
