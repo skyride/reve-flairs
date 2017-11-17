@@ -1,5 +1,6 @@
 import requests
 from django.core.management.base import BaseCommand
+from django.conf import settings
 
 from core.models import Alliance
 
@@ -17,11 +18,7 @@ class Command(BaseCommand):
         # Get special alliances
         special_alliances = list(Alliance.objects.filter(
             generic_logo=False,
-            name__in=[
-                "Black Legion.",
-                "Circle-Of-Two",
-                "SpaceMonkey's Alliance"
-            ]
+            name__in=settings.SPECIAL_ALLIANCES
         ).values_list('alliance_id', flat=True))
 
         krabs = set(largest_alliances) - set(active_alliances)

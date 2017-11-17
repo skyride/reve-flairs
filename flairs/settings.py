@@ -31,6 +31,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
 MEDIA_URL = "/media/"
 
 SUBREDDIT_CSS_URL = "https://raw.githubusercontent.com/Jibrisheve/-r-eve/master/Main%20subreddit/v4.0.css"
+SPECIAL_ALLIANCES = [
+    "Black Legion.",
+    "Circle-Of-Two",
+    "SpaceMonkey's Alliance"
+]
 
 
 # Application definition
