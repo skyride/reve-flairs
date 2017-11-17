@@ -18,6 +18,12 @@ class Config(SingletonModel):
     style_size = models.IntegerField(null=True, default=None)
 
 
+class Generic(models.Model):
+    name = models.CharField(max_length=32, null=True, default=None)
+    active = models.BooleanField(default=True)
+    logo = models.ImageField(upload_to="generics")
+
+
 class Corp(models.Model):
     corp_id = models.BigIntegerField(db_index=True)
     name = models.CharField(max_length=128, db_index=True)

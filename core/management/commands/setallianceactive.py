@@ -19,7 +19,8 @@ class Command(BaseCommand):
             generic_logo=False,
             name__in=[
                 "Black Legion.",
-                "Circle-Of-Two"
+                "Circle-Of-Two",
+                "SpaceMonkey's Alliance"
             ]
         ).values_list('alliance_id', flat=True))
 
