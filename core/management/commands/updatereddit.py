@@ -56,7 +56,7 @@ class Command(BaseCommand):
             print "Added %s" % corp.name
 
         # Get final lists
-        alliances = Alliance.objects.filter(active=True, generic_logo=False).all()
+        alliances = Alliance.objects.filter(active=True).all()
         corps = Corp.objects.filter(active=True).all()
         print "Getting final list of active alliances (%s) and corps (%s)" % (
             alliances.count(),
