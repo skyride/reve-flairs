@@ -35,7 +35,8 @@ SPECIAL_ALLIANCES = [
     "Black Legion.",
     "Circle-Of-Two",
     "SpaceMonkey's Alliance",
-    "Escalating Entropy"
+    "Escalating Entropy",
+    "Confederation of xXPIZZAXx"
 ]
 
 
