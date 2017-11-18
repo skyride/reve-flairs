@@ -34,7 +34,8 @@ SUBREDDIT_CSS_URL = "https://raw.githubusercontent.com/Jibrisheve/-r-eve/master/
 SPECIAL_ALLIANCES = [
     "Black Legion.",
     "Circle-Of-Two",
-    "SpaceMonkey's Alliance"
+    "SpaceMonkey's Alliance",
+    "Escalating Entropy"
 ]
 
 
