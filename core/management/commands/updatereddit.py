@@ -17,6 +17,10 @@ class Command(BaseCommand):
         sub = get_subreddit()
 
 
+        # CLEAR ALL SO WE CAN ALPHABETICALLY SORT THIS SHIT
+        sub.flair.templates.clear()
+        sub.flair.templates.add("CUSTOM", css_class="ag", text_editable=True)
+
         # Remove inactive generic flairs and build the generic flair list
         print "Removing inactive generic flairs"
         live_flairs = []
@@ -51,7 +55,7 @@ class Command(BaseCommand):
 
         # Add newly active alliance flairs
         print "Adding newly active alliance flairs"
-        for alliance in Alliance.objects.filter(active=True).exclude(id__in=live_flairs).all():
+        for alliance in Alliance.objects.filter(active=True).exclude(id__in=live_flairs).order_by('name').all():
             sub.flair.templates.add(alliance.name, css_class=alliance.css_class, text_editable=False)
             print "Added %s" % alliance.name
 
@@ -70,14 +74,14 @@ class Command(BaseCommand):
 
         # Add newly active corp flairs
         print "Adding newly active corp flairs"
-        for corp in Corp.objects.filter(active=True).exclude(id__in=live_flairs).all():
+        for corp in Corp.objects.filter(active=True).exclude(id__in=live_flairs).order_by('name').all():
             sub.flair.templates.add(corp.name, css_class="c%i" % corp.id, text_editable=False)
             print "Added %s" % corp.name
 
         # Get final lists
         generics = Generic.objects.filter(active=True).all()
-        alliances = Alliance.objects.filter(active=True).all()
-        corps = Corp.objects.filter(active=True).all()
+        alliances = Alliance.objects.filter(active=True).order_by('name').all()
+        corps = Corp.objects.filter(active=True).order_by('name').all()
         print "Getting final list of active generics (%s), alliances (%s) and corps (%s)" % (
             generics.count(),
             alliances.count(),
