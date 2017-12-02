@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ["192.168.0.18"]
 MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
 MEDIA_URL = "/media/"
 
+# Application Settings
 SUBREDDIT_CSS_URL = "https://raw.githubusercontent.com/Jibrisheve/-r-eve/master/Main%20subreddit/v4.0.css"
 SPECIAL_ALLIANCES = [
     "Black Legion.",
@@ -37,6 +38,10 @@ SPECIAL_ALLIANCES = [
     "SpaceMonkey's Alliance",
     "Escalating Entropy",
     "Confederation of xXPIZZAXx"
+]
+
+EXCLUDED_ALLIANCES = [
+    434243723
 ]
 
 
