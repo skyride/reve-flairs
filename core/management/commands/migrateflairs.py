@@ -39,6 +39,16 @@ class Command(BaseCommand):
             else:
                 return "Redditor %s already has the right CSS class" % flair['user'].name
 
+        # Check for generic
+        generic = Generic.objects.filter(name=flair['flair_text'])
+        if generic.exists():
+            generic = generic.first()
+            if generic.css_class != flair['flair_css_class']:
+                self.change_flair(flair['user'], generic)
+                return "Change %s to CSS class %s" % (flair['user'].name, generic.css_class)
+            else:
+                return "Redditor %s already has the right CSS class" % flair['user'].name
+
 
     def change_flair(self, redditor, new_flair):
         self.sub.flair.update([redditor], text=new_flair.name, css_class=new_flair.css_class)
