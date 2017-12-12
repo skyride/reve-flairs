@@ -12,6 +12,7 @@ from django.core.files import File
 from core.images import is_generic_alliance_logo
 
 
+
 class Config(SingletonModel):
     alliance_sprite = models.CharField(max_length=32, null=True, default=None)
     corp_sprite = models.CharField(max_length=32, null=True, default=None)
@@ -144,3 +145,32 @@ class Alliance(models.Model):
 
     def __str__(self):
         return "%s:%s" % (self.id, self.name)
+
+
+class Redditor(models.Model):
+    name = models.CharField(max_length=64, db_index=True)
+
+    @property
+    def flair(self):
+        flair = RedditorFlair.objects.first()
+        if flair == None:
+            return None
+        else:
+            if flair.alliance != None:
+                return flair.alliance
+            elif flair.corp != None:
+                return flair.corp
+            elif flair.generic != None:
+                return flair.generic
+            else:
+                return None
+
+
+class RedditorFlair(models.Model):
+    redditor = models.ForeignKey(Redditor, related_name="flairs")
+    started = models.DateField(db_index=True, auto_now_add=True)
+    ended = models.DateField(db_index=True, null=True, default=None)
+
+    alliance = models.ForeignKey(Alliance, null=True, default=None)
+    corp = models.ForeignKey(Corp, null=True, default=None)
+    generic = models.ForeignKey(Generic, null=True, default=None)
