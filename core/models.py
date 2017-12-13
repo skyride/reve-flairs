@@ -152,7 +152,7 @@ class Redditor(models.Model):
 
     @property
     def flair(self):
-        flair = RedditorFlair.objects.first()
+        flair = self.flairs.order_by('-started').first()
         if flair == None:
             return None
         else:
@@ -165,12 +165,15 @@ class Redditor(models.Model):
             else:
                 return None
 
+    def __str__(self):
+        return "id=%s name='%s'" % (self.id, self.name)
+
 
 class RedditorFlair(models.Model):
     redditor = models.ForeignKey(Redditor, related_name="flairs")
     started = models.DateField(db_index=True, auto_now_add=True)
     ended = models.DateField(db_index=True, null=True, default=None)
 
-    alliance = models.ForeignKey(Alliance, null=True, default=None)
-    corp = models.ForeignKey(Corp, null=True, default=None)
-    generic = models.ForeignKey(Generic, null=True, default=None)
+    alliance = models.ForeignKey(Alliance, null=True, default=None, related_name="redditorflairs")
+    corp = models.ForeignKey(Corp, null=True, default=None, related_name="redditorflairs")
+    generic = models.ForeignKey(Generic, null=True, default=None, related_name="redditorflairs")
