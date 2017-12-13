@@ -7,3 +7,4 @@ source ../bin/activate
 ./manage.py fetchallalliances
 ./manage.py setallianceactive
 ./manage.py updatereddit
+./manage.py collectflairstats
