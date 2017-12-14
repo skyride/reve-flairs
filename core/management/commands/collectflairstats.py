@@ -30,6 +30,7 @@ class Command(BaseCommand):
         if db_redditor.flair != None:
             old_flair = db_redditor.flair
             if old_flair.css_class != css_class:
+                old_flair = db_redditor.flair(rf=True)
                 old_flair.ended = timezone.now()
                 old_flair.save()
 
