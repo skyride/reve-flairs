@@ -37,7 +37,8 @@ SPECIAL_ALLIANCES = [
     "Circle-Of-Two",
     "SpaceMonkey's Alliance",
     "Escalating Entropy",
-    "Confederation of xXPIZZAXx"
+    "Confederation of xXPIZZAXx",
+    "Push Interstellar Network"
 ]
 
 EXCLUDED_ALLIANCES = [
