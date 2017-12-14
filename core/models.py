@@ -151,20 +151,21 @@ class Redditor(models.Model):
     name = models.CharField(max_length=64, db_index=True)
 
     @property
-    def flair(self, rf=False):
+    def flair(self):
         flair = self.flairs.filter(ended=None).order_by('-started').first()
         if flair == None:
             return None
         else:
-            if rf == True:
-                return flair
-            else:
-                if flair.alliance != None:
-                    return flair.alliance
-                elif flair.corp != None:
-                    return flair.corp
-                elif flair.generic != None:
-                    return flair.generic
+            if flair.alliance != None:
+                return flair.alliance
+            elif flair.corp != None:
+                return flair.corp
+            elif flair.generic != None:
+                return flair.generic
+            
+    @property
+    def rf(self):
+        return self.flairs.filter(ended=None).order_by('-started').first()
 
     def __str__(self):
         return "id=%s name='%s'" % (self.id, self.name)
