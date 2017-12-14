@@ -152,7 +152,7 @@ class Redditor(models.Model):
 
     @property
     def flair(self):
-        flair = self.flairs.order_by('-started').first()
+        flair = self.flairs.filter(ended=None).order_by('-started').first()
         if flair == None:
             return None
         else:
