@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load imagekit %}
+
+{% block content %}
+<h1>{{ header }}</h1>
+
+<table class="table table-striped">
+  <tr>
+    <th>Position</th>
+    <th colspan="2">Alliance</th>
+    <th>Redditors</th>
+  </tr>
+  {% for i, flair in flairs %}
+  <tr>
+    <td>{{ i|add:"1" }}</td>
+    <td style="padding: 0;">
+      <!--<img width="38" height="38" src="{{ MEDIA_URL }}{{ flair.logo }}">-->
+      {% generateimage 'core:logo' source=flair.logo %}
+    </td>
+    <td>
+      {{ flair.name }}
+      {% if flair.ticker %}
+      &lt;{{ flair.ticker }}&gt;
+      {% endif %}
+    </td>
+    <td>{{ flair.flair_count }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
