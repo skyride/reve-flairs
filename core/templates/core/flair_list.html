@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load imagekit %}
+{% load imagekit mathfilters %}
 
 {% block content %}
 <h1>{{ header }}</h1>
@@ -14,7 +14,6 @@
   <tr>
     <td>{{ i|add:"1" }}</td>
     <td style="padding: 0;">
-      <!--<img width="38" height="38" src="{{ MEDIA_URL }}{{ flair.logo }}">-->
       {% generateimage 'core:logo' source=flair.logo %}
     </td>
     <td>
@@ -23,7 +22,21 @@
       &lt;{{ flair.ticker }}&gt;
       {% endif %}
     </td>
-    <td>{{ flair.flair_count }}</td>
+    <td>
+      {% with delta=flair.flair_count|sub:flair.flair_lastweek %}
+      {{ flair.flair_count }}
+      {% if delta != 0 %}
+      <span class="{% if delta > 0 %}text-success{% else %}text-danger{% endif %}">
+        {% if delta > 0 %}
+        <span class="glyphicon glyphicon-arrow-up"></span>
+        {% else %}
+        <span class="glyphicon glyphicon-arrow-down"></span>
+        {% endif %}
+        <strong>{{ delta }}</strong>
+      </span>
+      {% endif %}
+      {% endwith %}
+    </td>
   </tr>
   {% endfor %}
 </table>

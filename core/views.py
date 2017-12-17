@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from datetime import timedelta
 
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.db.models import Count, Case, When, Sum
+from django.db.models import Count, Case, When, Sum, Q
+from django.utils import timezone
 from imagekit import ImageSpec, register
 from imagekit.processors import ResizeToFill
 
@@ -14,6 +16,19 @@ from core.models import *
 redditorflair_filter = Sum(
     Case(
         When(redditorflairs__ended__isnull=True, then=1),
+        default=0,
+        output_field=models.IntegerField()
+    )
+)
+redditorflair_lastweek = Sum(
+    Case(
+        When(
+            Q(
+                Q(redditorflairs__ended__isnull=True) | Q(redditorflairs__ended__lt=timezone.now()-timedelta(days=7)),
+                redditorflairs__started__lt=timezone.now() - timedelta(days=7),
+            ),
+            then=1
+        ),
         default=0,
         output_field=models.IntegerField()
     )
@@ -31,7 +46,8 @@ def all_top100_stats(request):
     alliances = Alliance.objects.filter(
         active=True
     ).annotate(
-        flair_count=redditorflair_filter
+        flair_count=redditorflair_filter,
+        flair_lastweek=redditorflair_lastweek
     ).order_by(
         '-flair_count',
         'name'
@@ -39,7 +55,8 @@ def all_top100_stats(request):
     corps = Corp.objects.filter(
         active=True
     ).annotate(
-        flair_count=redditorflair_filter
+        flair_count=redditorflair_filter,
+        flair_lastweek=redditorflair_lastweek
     ).order_by(
         '-flair_count',
         'name'
@@ -47,7 +64,8 @@ def all_top100_stats(request):
     generics = Generic.objects.filter(
         active=True
     ).annotate(
-        flair_count=redditorflair_filter
+        flair_count=redditorflair_filter,
+        flair_lastweek=redditorflair_lastweek
     ).order_by(
         '-flair_count',
         'name'
@@ -68,7 +86,8 @@ def alliance_stats(request):
     alliances = Alliance.objects.filter(
         active=True
     ).annotate(
-        flair_count=redditorflair_filter
+        flair_count=redditorflair_filter,
+        flair_lastweek=redditorflair_lastweek
     ).order_by(
         '-flair_count',
         'name'
@@ -86,7 +105,8 @@ def corp_stats(request):
     corps = Corp.objects.filter(
         active=True
     ).annotate(
-        flair_count=redditorflair_filter
+        flair_count=redditorflair_filter,
+        flair_lastweek=redditorflair_lastweek
     ).order_by(
         '-flair_count',
         'name'
@@ -104,7 +124,8 @@ def generic_stats(request):
     generics = Generic.objects.filter(
         active=True
     ).annotate(
-        flair_count=redditorflair_filter
+        flair_count=redditorflair_filter,
+        flair_lastweek=redditorflair_lastweek
     ).order_by(
         '-flair_count',
         'name'
