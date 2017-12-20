@@ -25,7 +25,7 @@ redditorflair_lastweek = Sum(
         When(
             Q(
                 Q(redditorflairs__ended__isnull=True) | Q(redditorflairs__ended__lt=timezone.now()-timedelta(days=7)),
-                redditorflairs__started__lt=timezone.now() - timedelta(days=7),
+                redditorflairs__started__lt=timezone.now() - timedelta(days=5),
             ),
             then=1
         ),
