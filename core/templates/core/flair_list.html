@@ -12,6 +12,7 @@
     <th class="col-md-9 col-sm-8" colspan="2">Flair</th>
     <th class="col-md-2 col-sm-3">Redditors (5 day delta)</th>
   </tr>
+  {% cache 3600 flair_top_list header %}
   {% for i, flair in flairs %}
   <tr>
     <td>{{ i|add:"1" }}</td>
@@ -41,5 +42,6 @@
     </td>
   </tr>
   {% endfor %}
+  {% endcache %}
 </table>
 {% endblock %}
