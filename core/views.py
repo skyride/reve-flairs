@@ -43,6 +43,7 @@ class Thumbnail(ImageSpec):
 register.generator('core:logo', Thumbnail)
 
 
+@cache_page(60 * 60)
 def all_top100_stats(request):
     alliances = Alliance.objects.filter(
         active=True
@@ -103,6 +104,7 @@ def alliance_stats(request):
     return render(request, "core/flair_list.html", context)
 
 
+@cache_page(60 * 60)
 def corp_stats(request):
     corps = Corp.objects.filter(
         active=True
@@ -122,6 +124,7 @@ def corp_stats(request):
     return render(request, "core/flair_list.html", context)
 
 
+@cache_page(60 * 60)
 def generic_stats(request):
     generics = Generic.objects.filter(
         active=True
