@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load imagekit mathfilters %}
+{% load imagekit mathfilters cache %}
 
 {% block title %}{{ header }}{% endblock %}
 
@@ -9,7 +9,7 @@
 <table class="table table-striped">
   <tr>
     <th class="col-md-1">Position</th>
-    <th class="col-md-9 col-sm-8" colspan="2">Alliance</th>
+    <th class="col-md-9 col-sm-8" colspan="2">Flair</th>
     <th class="col-md-2 col-sm-3">Redditors (5 day delta)</th>
   </tr>
   {% for i, flair in flairs %}
