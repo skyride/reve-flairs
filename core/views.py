@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import Count, Case, When, Sum, Q
 from django.utils import timezone
+from django.views.decorators.cache import cache_page
 from imagekit import ImageSpec, register
 from imagekit.processors import ResizeToFill
 
@@ -82,6 +83,7 @@ def all_top100_stats(request):
     return render(request, "core/flair_list.html", context)
 
 
+@cache_page(60 * 60)
 def alliance_stats(request):
     alliances = Alliance.objects.filter(
         active=True
