@@ -51,7 +51,7 @@ class Corp(models.Model):
     @staticmethod
     def fetch(id, active=False):
         # Get data
-        corp = requests.get("https://esi.tech.ccp.is/latest/corporations/%s/" % id)
+        corp = requests.get("https://esi.tech.ccp.is/v4/corporations/%s/" % id)
         if corp.status_code != 200:
             return None
 
@@ -64,7 +64,7 @@ class Corp(models.Model):
         if db_corp == None:
             db_corp = Corp(corp_id=id)
 
-        db_corp.name = corp['corporation_name']
+        db_corp.name = corp['name']
         db_corp.ticker = corp['ticker']
         db_corp.member_count = corp['member_count']
         db_corp.active = active
@@ -112,8 +112,8 @@ class Alliance(models.Model):
     @staticmethod
     def fetch(id):
         # Get data
-        alliance = requests.get("https://esi.tech.ccp.is/latest/alliances/%s/" % id)
-        corps = requests.get("https://esi.tech.ccp.is/latest/alliances/%s/corporations/" % id)
+        alliance = requests.get("https://esi.tech.ccp.is/v3/alliances/%s/" % id)
+        corps = requests.get("https://esi.tech.ccp.is/v1/alliances/%s/corporations/" % id)
         if alliance.status_code != 200:
             return None
 
@@ -127,7 +127,7 @@ class Alliance(models.Model):
         if db_alliance == None:
             db_alliance = Alliance(alliance_id=id)
 
-        db_alliance.name = alliance['alliance_name']
+        db_alliance.name = alliance['name']
         db_alliance.ticker = alliance['ticker']
         db_alliance.corp_count = len(corps)
 
