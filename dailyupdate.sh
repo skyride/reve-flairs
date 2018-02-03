@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # Activate virtualenv
-source ../bin/activate
 
 # Run commands
-./manage.py fetchallalliances
-./manage.py setallianceactive
-./manage.py updatereddit
-./manage.py collectflairstats
+../bin/python manage.py fetchallalliances
+../bin/python manage.py setallianceactive
+../bin/python manage.py updatereddit
+../bin/python manage.py collectflairstats
