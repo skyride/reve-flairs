@@ -17,7 +17,7 @@ class Command(BaseCommand):
                 alliance_id__in=settings.EXCLUDED_ALLIANCES
             ).order_by(
                 '-characters'
-            ).values_list('alliance_id', flat=True)[:150]
+            ).values_list('alliance_id', flat=True)[:50]
         )
 
         # Get the most active pvp alliances
@@ -28,7 +28,7 @@ class Command(BaseCommand):
                 alliance_id__in=settings.EXCLUDED_ALLIANCES
             ).order_by(
                 '-recent_kills'
-            ).values_list('alliance_id', flat=True)[:250]
+            ).values_list('alliance_id', flat=True)[:200]
         )
 
         # Get special alliances
