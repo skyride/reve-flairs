@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load imagekit mathfilters cache %}
+{% load imagekit %}
 
 {% block title %}{{ header }}{% endblock %}
 
@@ -7,6 +7,22 @@
 <h1>Corp Admin</h1>
 
 <table class="table table-striped">
-  
+  <tr>
+    <th></th>
+    <th>Flair</th>
+    <th></th>
+    <th>Redditors</th>
+  </tr>
+
+  {% for corp in corps %}
+    <tr>
+      <td></td>
+      <td style="padding: 0;">
+        {% generateimage 'core:logo' source=corp.logo %}
+      </td>
+      <td>{{ corp.name }} [{{ corp.ticker }}]</td>
+      <td>{{ corp.flair_count }}</td>
+    </tr>
+  {% endfor %}
 </table>
 {% endblock %}

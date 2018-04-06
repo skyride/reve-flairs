@@ -4,13 +4,14 @@ from datetime import timedelta
 
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.db import models
 from django.db.models import Count, Case, When, Sum, Q
 from django.utils import timezone
 from django.views.decorators.cache import cache_page
 from imagekit import ImageSpec, register
 from imagekit.processors import ResizeToFill
 
-from core.models import *
+from core.models import Alliance, Corp, Generic
 
 
 # Annotation filter to find redditorflair objects with
@@ -145,4 +146,14 @@ def generic_stats(request):
 
 
 def admin(request):
-    return render(request, "core/admin.html", {})
+    corps = Corp.objects.annotate(
+        flair_count=redditorflair_filter
+    ).order_by(
+        'id'
+    ).all()
+
+    context = {
+        "corps": corps
+    }
+
+    return render(request, "core/admin.html", context)
