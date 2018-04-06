@@ -142,3 +142,7 @@ def generic_stats(request):
     }
 
     return render(request, "core/flair_list.html", context)
+
+
+def admin(request):
+    return render(request, "core/admin.html", {})
