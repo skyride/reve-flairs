@@ -149,7 +149,7 @@ def admin(request):
     corps = Corp.objects.annotate(
         flair_count=redditorflair_filter
     ).order_by(
-        'id'
+        'name'
     ).all()
 
     context = {

@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'social_django',
+    'bootstrap3',
     'imagekit',
     'solo',
     'mathfilters',
