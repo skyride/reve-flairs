@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from datetime import timedelta
 
 from django import forms
+from django.contrib import messages
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.db import models
@@ -13,6 +14,7 @@ from imagekit import ImageSpec, register
 from imagekit.processors import ResizeToFill
 
 from core.models import Alliance, Corp, Generic
+from core.forms import CorpAddForm
 
 
 # Annotation filter to find redditorflair objects with
@@ -147,19 +149,31 @@ def generic_stats(request):
 
 
 def admin(request):
+    form_data = None
+    if request.method == "POST":
+        if request.POST.get("submit") == "corplist":
+            ids = map(int, request.POST.getlist("corp"))
+            Corp.objects.filter(id__in=ids).update(active=True)
+            Corp.objects.exclude(id__in=ids).update(active=False)
+
+        if request.POST.get("submit") == "addcorp":
+            form_data = request.POST
+            form = CorpAddForm(request.POST)
+            if form.is_valid():
+                # Add the corp
+                corp = Corp.fetch(form.cleaned_data['id'], active=True)
+                messages.success(request, "Successfully added new corp %s [%s]" % (corp.name, corp.ticker))
+                #form_data = None
+
     corps = Corp.objects.annotate(
         flair_count=redditorflair_filter
     ).order_by(
         'name'
     ).all()
 
-    if request.method == "POST":
-        ids = map(int, request.POST.getlist("corp"))
-        Corp.objects.filter(id__in=ids).update(active=True)
-        Corp.objects.exclude(id__in=ids).update(active=False)
-
     context = {
-        "corps": corps
+        "corps": corps,
+        "form": CorpAddForm(form_data)
     }
 
     return render(request, "core/admin.html", context)

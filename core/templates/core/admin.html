@@ -6,6 +6,16 @@
 {% block content %}
 <h1>Corp Admin</h1>
 
+<div class="well well-md">
+  <h3>Add Corp</h3>
+
+  <form method="POST">
+    {% csrf_token %}
+    {% bootstrap_form form=form %}
+    {% bootstrap_button content="Submit" name="submit" value="addcorp" button_class="btn-primary" extra_classes="btn-block" %}
+  </form>
+</div>
+
 <form method="POST">
   {% csrf_token %}
   <table class="table table-striped">
@@ -37,6 +47,6 @@
   </table>
 
   <br />
-  {% bootstrap_button content="Submit" button_class="btn-primary" extra_classes="btn-block" %}
+  {% bootstrap_button content="Submit" name="submit" value="corplist" button_class="btn-primary" extra_classes="btn-block" %}
 </form>
 {% endblock %}
