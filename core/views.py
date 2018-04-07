@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from datetime import timedelta
 
+from django import forms
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.db import models
@@ -151,6 +152,11 @@ def admin(request):
     ).order_by(
         'name'
     ).all()
+
+    if request.method == "POST":
+        ids = map(int, request.POST.getlist("corp"))
+        Corp.objects.filter(id__in=ids).update(active=True)
+        Corp.objects.exclude(id__in=ids).update(active=False)
 
     context = {
         "corps": corps

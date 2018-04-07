@@ -8,6 +8,7 @@ from solo.models import SingletonModel
 from django.db import models
 from django.conf import settings
 from django.core.files import File
+from django import forms
 
 from core.images import is_generic_alliance_logo
 
@@ -76,6 +77,9 @@ class Corp(models.Model):
         )
 
         return db_corp
+
+    def field(self):
+        return forms.BooleanField()
 
     def __str__(self):
         return "%s:%s" % (self.id, self.name)

@@ -6,23 +6,37 @@
 {% block content %}
 <h1>Corp Admin</h1>
 
-<table class="table table-striped">
-  <tr>
-    <th></th>
-    <th>Flair</th>
-    <th></th>
-    <th>Redditors</th>
-  </tr>
-
-  {% for corp in corps %}
+<form method="POST">
+  {% csrf_token %}
+  <table class="table table-striped">
     <tr>
-      <td></td>
-      <td style="padding: 0;">
-        {% generateimage 'core:logo' source=corp.logo %}
-      </td>
-      <td>{{ corp.name }} [{{ corp.ticker }}]</td>
-      <td>{{ corp.flair_count }}</td>
+      <th>
+        <div align="center">
+          Active
+        </div>
+      </th>
+      <th>Flair</th>
+      <th></th>
+      <th>Redditors</th>
     </tr>
-  {% endfor %}
-</table>
+
+    {% for corp in corps %}
+      <tr>
+        <td>
+          <div align="center">
+            <input type="checkbox" name="corp" value="{{ corp.id }}" {% if corp.active %}checked{% endif %} />
+          </div>
+        </td>
+        <td style="padding: 0;">
+          {% generateimage 'core:logo' source=corp.logo %}
+        </td>
+        <td>{{ corp.name }} [{{ corp.ticker }}]</td>
+        <td>{{ corp.flair_count }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  <br />
+  {% bootstrap_button content="Submit" button_class="btn-primary" extra_classes="btn-block" %}
+</form>
 {% endblock %}
