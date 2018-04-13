@@ -40,6 +40,7 @@ SPECIAL_ALLIANCES = [
     "Confederation of xXPIZZAXx",
     "Push Interstellar Network",
     "Ninja Unicorns with Huge Horns",
+    "Space Violence.",
 ]
 
 EXCLUDED_ALLIANCES = [
