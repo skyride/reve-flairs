@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
         # CLEAR ALL SO WE CAN ALPHABETICALLY SORT THIS SHIT
         sub.flair.templates.clear()
-        sub.flair.templates.add("CUSTOM", css_class="ag", text_editable=True)
+        #sub.flair.templates.add("CUSTOM", css_class="ag", text_editable=True)
 
         # Remove inactive generic flairs and build the generic flair list
         print "Removing inactive generic flairs"
