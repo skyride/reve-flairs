@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print "Fetching full alliance list..."
-        alliance_ids = requests.get("https://esi.tech.ccp.is/latest/alliances/").json()
+        alliance_ids = requests.get("https://esi.evetech.net/latest/alliances/").json()
         alliance_ids = alliance_ids
         print "%i alliances in the list, starting..." % len(alliance_ids)
 

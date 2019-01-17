@@ -52,7 +52,7 @@ class Corp(models.Model):
     @staticmethod
     def fetch(id, active=False):
         # Get data
-        corp = requests.get("https://esi.tech.ccp.is/v4/corporations/%s/" % id)
+        corp = requests.get("https://esi.evetech.net/v4/corporations/%s/" % id)
         if corp.status_code != 200:
             return None
 
@@ -113,8 +113,8 @@ class Alliance(models.Model):
     @staticmethod
     def fetch(id):
         # Get data
-        alliance = requests.get("https://esi.tech.ccp.is/v3/alliances/%s/" % id)
-        corps = requests.get("https://esi.tech.ccp.is/v1/alliances/%s/corporations/" % id)
+        alliance = requests.get("https://esi.evetech.net/v3/alliances/%s/" % id)
+        corps = requests.get("https://esi.evetech.net/v1/alliances/%s/corporations/" % id)
         if alliance.status_code != 200:
             return None
 

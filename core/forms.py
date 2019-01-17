@@ -17,7 +17,7 @@ class CorpAddForm(forms.Form):
             raise forms.ValidationError("%s is already in the database" % corp.first().name)
 
         # Test fetch the corp id
-        r = requests.get("https://esi.tech.ccp.is/latest/corporations/%s/?datasource=tranquility" % id)
+        r = requests.get("https://esi.evetech.net/latest/corporations/%s/?datasource=tranquility" % id)
         if r.status_code != 200:
             raise forms.ValidationError("Failed to fetch corp from ESI")
 
