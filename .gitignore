@@ -102,3 +102,4 @@ ENV/
 
 *.sqlite*
 local_settings.py
+.vscode/

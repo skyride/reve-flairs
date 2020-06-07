@@ -1,5 +1,5 @@
 Django==1.11.28
-MySQL-python==1.2.5
+psycopg2==2.8.5
 Pillow==4.3.0
 PyJWT==1.5.3
 argparse==1.2.1
