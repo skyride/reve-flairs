@@ -1,8 +1,8 @@
 name: Publish Docker
 on:
-  branches:
-    - master
   push:
+    branches:
+      - master
     tags:
       - "*"
 jobs:
