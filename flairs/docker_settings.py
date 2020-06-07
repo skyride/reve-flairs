@@ -1,5 +1,7 @@
 import os
 
+DEBUG = bool(int(os.environ.get("DEBUG", "0")))
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',

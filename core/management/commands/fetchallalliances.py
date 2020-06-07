@@ -1,5 +1,6 @@
-import requests
+import time
 
+import requests
 from django.core.management.base import BaseCommand
 
 from core.models import Alliance
@@ -19,23 +20,31 @@ class Command(BaseCommand):
             alliance = Alliance.fetch(id)
 
             # Get data from zkill
-            zkill = requests.get("https://zkillboard.com/api/stats/allianceID/%s/" % id).json()
+            # If we hit a 429 then wait half a second and retry
+            while True:
+                time.sleep(0.2)
+                response = requests.get("https://zkillboard.com/api/stats/allianceID/%s/" % id)
+                if response.status_code == 200:
+                    zkill = response.json()
+                    break
+                elif response.status_code == 429:
+                    time.sleep(0.5)
+
             try:
                 try:
                     alliance.characters = zkill['info']['memberCount']
                 except KeyError:
                     print "Failed to fetch meta data from zkill"
 
-                try:
-                    alliance.ships_destroyed = zkill['shipsDestroyed']
-                except KeyError:
-                    print "Failed to fetch ships destroyed from zkill"
+                alliance.ships_destroyed = zkill.get('shipsDestroyed', 0)
 
                 try:
                     alliance.active_chars = zkill['activepvp']['characters']['count']
                     alliance.recent_kills = zkill['activepvp']['kills']['count']
                 except KeyError:
-                    print "Failed to fetch active pvp data from zkill"
+                    alliance.active_chars = 0
+                    alliance.recent_kills = 0
+
                 alliance.save()
 
             except Exception:
