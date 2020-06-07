@@ -1,7 +1,7 @@
 version: "3"
 services:
   app:
-    image: skyride/reve-flairs:1.1.0
+    image: skyride/reve-flairs:1.1.1
     restart: always
     env_file:
       - .env
