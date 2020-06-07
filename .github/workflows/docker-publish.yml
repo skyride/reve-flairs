@@ -28,4 +28,4 @@ jobs:
         curl ${SENTRY_RELEASE_URL} \
           -X POST \
           -H 'Content-Type: application/json' \
-          -d '{"version": "${TAG}"}'
+          -d "{\"version\": \"${TAG}\"}"
