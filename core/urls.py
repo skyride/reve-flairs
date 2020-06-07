@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^corps/$', views.corp_stats, name="corps"),
     url(r'^generics/$', views.generic_stats, name="generics"),
 
-    url(r'admin/$', views.admin, name="admin")
+    #url(r'admin/$', views.admin, name="admin")
 ]
 
 if settings.DEBUG:
