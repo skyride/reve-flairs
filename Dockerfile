@@ -13,6 +13,10 @@ RUN pip install -r requirements.txt
 COPY . .
 COPY flairs/docker_settings.py flairs/local_settings.py
 
+# Versioning (for Sentry)
+ARG TAG=dev
+ENV TAG=${TAG}
+
 # Collectstatic
 ARG DB_HOST=
 ARG DB_NAME=

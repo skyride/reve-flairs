@@ -10,8 +10,11 @@ jobs:
     - uses: actions/checkout@master
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
+      env:
+        TAG: ${GITHUB_REF##*/}
       with:
         name: skyride/reve-flairs
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         tag_semver: true
+        build_args: TAG
