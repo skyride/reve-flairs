@@ -1,4 +1,4 @@
-Django==1.11.28
+Django==1.11.29
 psycopg2==2.8.5
 Pillow==4.3.0
 PyJWT==1.5.3
