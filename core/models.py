@@ -70,7 +70,10 @@ class Corp(models.Model):
         db_corp.member_count = corp['member_count']
         db_corp.active = active
 
-        db_corp.save()
+        # Delete the existing image first
+        if db_corp.logo and os.path.exists(db_corp.logo.path):
+            os.remove(db_corp.logo.path)
+
         db_corp.logo.save(
             "corp_%s.png" % id,
             File(open(logo[0]))
@@ -132,7 +135,10 @@ class Alliance(models.Model):
         db_alliance.ticker = alliance['ticker']
         db_alliance.corp_count = len(corps)
 
-        db_alliance.save()
+        # Delete the existing image first
+        if db_alliance.logo and os.path.exists(db_alliance.logo.path):
+            os.remove(db_alliance.logo.path)
+
         db_alliance.logo.save(
             "alliance_%s.png" % id,
             File(open(logo[0]))
