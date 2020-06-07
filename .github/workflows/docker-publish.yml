@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       env:
@@ -18,3 +19,13 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         tag_semver: true
         buildargs: TAG
+    
+    - name: Create Sentry Release
+      env:
+        TAG: ${GITHUB_REF##*/}
+        SENTRY_RELEASE_URL: ${{ secrets.SENTRY_RELEASE_URL }}
+      run: |
+        curl ${SENTRY_RELEASE_URL} \
+          -X POST \
+          -H 'Content-Type: application/json' \
+          -d '{"version": "${TAG}"}'
