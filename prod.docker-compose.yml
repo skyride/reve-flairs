@@ -1,0 +1,14 @@
+version: "3"
+services:
+  app:
+    image: skyride/reve-flairs:1.0.0
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - media:/media
+    ports:
+      - ${PORT}:${PORT}
+
+volumes:
+  media:

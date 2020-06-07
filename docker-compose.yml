@@ -7,6 +7,7 @@ services:
       - .env
     volumes:
       - .:/app
+      - media:/media
     ports:
       - ${PORT}:${PORT}
     command: ./manage.py runserver 0:8000
@@ -24,5 +25,5 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
 
 volumes:
+  media:
   pgdata:
-  redisdata:
