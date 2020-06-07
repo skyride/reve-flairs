@@ -9,10 +9,11 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
+    - name: "Set env"
+      run: echo ::set-env name=TAG::${GITHUB_REF#refs/*/}
+
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
-      env:
-        TAG: ${GITHUB_REF##*/}
       with:
         name: skyride/reve-flairs
         username: ${{ secrets.DOCKER_USERNAME }}
@@ -22,7 +23,6 @@ jobs:
     
     - name: Create Sentry Release
       env:
-        TAG: ${GITHUB_REF##*/}
         SENTRY_RELEASE_URL: ${{ secrets.SENTRY_RELEASE_URL }}
       run: |
         curl ${SENTRY_RELEASE_URL} \
