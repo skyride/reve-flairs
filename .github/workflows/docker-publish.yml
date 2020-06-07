@@ -1,9 +1,10 @@
 name: Publish Docker
 on:
+  branches:
+    - master
   push:
     tags:
       - "*"
-
 jobs:
   build:
     runs-on: ubuntu-latest
