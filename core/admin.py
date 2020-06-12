@@ -15,8 +15,13 @@ class BaseAdmin(admin.ModelAdmin):
         return format_html('<img src="{}" />'.format(obj.logo.url))
 
     def get_form(self, request, obj=None, **kwargs):
+        if not hasattr(self, "_form"):
+            self._form = self.form
+
         if not obj and hasattr(self, "add_form"):
             self.form = self.add_form
+        else:
+            self.form = self._form
 
         return super(BaseAdmin, self).get_form(request, obj, **kwargs)
 
@@ -37,7 +42,7 @@ class AllianceAdmin(BaseAdmin):
 
 @admin.register(Corp)
 class CorpAdmin(BaseAdmin):
-    list_display = ("name", "ticker", "corp_id", "member_count")
+    list_display = ("name", "ticker", "corp_id", "member_count", "active")
     list_filter = ("active", )
     add_form = CorpAddForm
 
