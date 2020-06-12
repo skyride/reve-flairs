@@ -50,7 +50,7 @@ class Corp(models.Model):
         return "c%s" % self.id
 
     @staticmethod
-    def fetch(id, active=False):
+    def fetch(id, active=False, commit=True):
         # Get data
         corp = requests.get("https://esi.evetech.net/v4/corporations/%s/" % id)
         if corp.status_code != 200:

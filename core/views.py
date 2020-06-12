@@ -146,34 +146,3 @@ def generic_stats(request):
     }
 
     return render(request, "core/flair_list.html", context)
-
-
-def admin(request):
-    form_data = None
-    if request.method == "POST":
-        if request.POST.get("submit") == "corplist":
-            ids = map(int, request.POST.getlist("corp"))
-            Corp.objects.filter(id__in=ids).update(active=True)
-            Corp.objects.exclude(id__in=ids).update(active=False)
-
-        if request.POST.get("submit") == "addcorp":
-            form_data = request.POST
-            form = CorpAddForm(request.POST)
-            if form.is_valid():
-                # Add the corp
-                corp = Corp.fetch(form.cleaned_data['id'], active=True)
-                messages.success(request, "Successfully added new corp %s [%s]" % (corp.name, corp.ticker))
-                #form_data = None
-
-    corps = Corp.objects.annotate(
-        flair_count=redditorflair_filter
-    ).order_by(
-        'name'
-    ).all()
-
-    context = {
-        "corps": corps,
-        "form": CorpAddForm(form_data)
-    }
-
-    return render(request, "core/admin.html", context)
