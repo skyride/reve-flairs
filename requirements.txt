@@ -28,7 +28,7 @@ six==1.11.0
 social-auth-app-django==2.0.0
 social-auth-core==1.5.0
 update-checker==0.16
-urllib3==1.24.2
+urllib3==1.26.5
 wsgiref==0.1.2
 django-bootstrap3==9.1.0
 sentry-sdk==0.14.4
