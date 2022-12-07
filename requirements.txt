@@ -3,7 +3,7 @@ psycopg2==2.8.5
 Pillow==4.3.0
 PyJWT==1.5.3
 argparse==1.2.1
-certifi==2017.11.5
+certifi==2022.12.7
 chardet==3.0.4
 csscompressor==0.9.4
 django-appconf==1.0.2
